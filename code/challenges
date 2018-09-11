@@ -1,0 +1,10 @@
+writing asm code to display text using bios interrupts
+research compression algorithms
+implement huffman (~50% compression)
+issues with fitting the binary tree used for decodification into the 512 bytes
+	approaches tried & chosen one
+other compression approaches
+
+what have I learned
+
+###use data to explain all the decisions
