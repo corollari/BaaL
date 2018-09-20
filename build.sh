@@ -1,3 +1,4 @@
+mkdir -p output
 python code/text2asm.py #generate output/text.asm
 cat code/start.asm code/display.asm output/text.asm code/end.asm > output/rawTextFinal.asm
 nasm -f bin output/rawTextFinal.asm -o output/rawTextBoot.bin
