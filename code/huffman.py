@@ -1,5 +1,4 @@
-text='a'*10+'b'*15+'c'*30+'d'*16+'e'*29
-realText="One of the big picture issues in looking at compiled C code is the function-calling conventions. These are the methods that a calling function and a called function agree on how parameters and return values should be passed between them, and how the stack is used by the function itself. The layout of the stack constitutes the stack frame, and knowing how this works can go a long way to decoding how something works.In C and modern CPU design conventions, the stack frame is a chunk of memory, allocated from the stack, at run-time, each time a function is called, to store its automatic variables. Hence nested or recursive calls to the same function, each successively obtain their own separate frames.Physically, a function's stack frame is the area between the addresses contained in esp, the stack pointer, and ebp, the frame pointer (base pointer in Intel terminology). Thus, if a function pushes more values onto the stack, it is effectively growing its frame.This is a very low-level view: the picture as seen from the C/C++ programmer is illustrated elsewhere:"
+from textProcessing import preprocess
 
 def getFreqs(text):
     freqs={}
@@ -56,12 +55,12 @@ def decode(encoded, tree):
     return text
 
 import hashlib
-def printASM(tree, root=True):
+def printASM(tree, out, root=True):
     if(isinstance(tree, basestring)):
         return ord(tree)
     else:
-        l=printASM(tree[0], False)
-        r=printASM(tree[1], False)
+        l=printASM(tree[0], out, False)
+        r=printASM(tree[1], out, False)
         label='h'+hashlib.sha256(str(l)+str(r)).hexdigest() # len(label)<=4096
         if(root):
             label="root"
@@ -73,15 +72,30 @@ def printASM(tree, root=True):
                 line+=",1"
         elif(isinstance(r, int)):
             line+=",2"
-        print(line)
+        out.write(line+"\n")
         return label
+
+def hex2asm(hexCode):
+    asm="encoded: db "
+    comma=False
+    for c in hexCode:
+        asm+=c
+        if comma:
+            asm+=','
+        comma = not comma
+    return asm
 
 def fullEncode(text):
     tree=buildTree(text)
-    printASM(tree)
-    print('')
+    open("./output/tree.asm", "w").write('')
+    treeFile=open("./output/tree.asm", "a")
+    printASM(tree, treeFile)
     keys=buildKeys(tree)
     return encode(text, keys)
 
 if __name__ == "__main__":
-    print(hex(int(fullEncode(realText), 2)))
+    text=open("./letter.txt", "r").read()
+    text=preprocess(text)
+    encodedHEX=hex(int(fullEncode(text), 2))
+    open("./output/encodedLetter.hex", "w").write(encodedHEX)
+    open("./output/encoded.asm", "w").write(hex2asm(encodedHEX))

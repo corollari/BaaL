@@ -1,2 +1,2 @@
-# BaaCL
-Bootloader as a Cover Letter
+# BaaL
+Bootloader as a Letter
