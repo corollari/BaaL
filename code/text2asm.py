@@ -1,6 +1,6 @@
-from textProcessing import preprocess
+from textProcessing import preprocess, getLetter
 
-text=open("./letter.txt", "r").read()
+text=getLetter()
 text=preprocess(text)
 asm="text: db "
 for c in text:

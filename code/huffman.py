@@ -1,4 +1,4 @@
-from textProcessing import preprocess
+from textProcessing import preprocess, getLetter
 
 def getFreqs(text):
     freqs={}
@@ -94,7 +94,7 @@ def fullEncode(text):
     return encode(text, keys)
 
 if __name__ == "__main__":
-    text=open("./letter.txt", "r").read()
+    text=getLetter()
     text=preprocess(text)
     encodedHEX=hex(int(fullEncode(text), 2))
     open("./output/encodedLetter.hex", "w").write(encodedHEX)
